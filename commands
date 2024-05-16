@@ -1,0 +1,20 @@
+# start container:
+    docker-compose up -d
+# show running containers:
+    docker ps
+# how to create a topic:
+    docker exec -it container_id bash
+    #INSIDE THE CONTAINER
+    kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic topicName
+
+# show topics:
+    #INSIDE THE CONTAINER
+    kafka-topics.sh --list --bootstrap-server localhost:9092
+
+# custom topic create command(i did using create-topic.sh):
+    docker-compose exec kafka /bin/bash /create-topics.sh --name=topicName
+
+# see the topic contents:
+    kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic test-products --from-beginning
+
+    
