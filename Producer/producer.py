@@ -1,25 +1,22 @@
 from kafka import KafkaProducer
 import json
+import time
+
 
 def produce_messages(broker, topic):
     producer = KafkaProducer(
         bootstrap_servers=[broker],
         value_serializer=lambda v: json.dumps(v).encode('utf-8')
     )
-    
-    # Example messages
-    messages = [
-        {"product_id": 1, "name": "Product 1", "price": 10.0},
-        {"product_id": 2, "name": "Product 2", "price": 20.0},
-        {"product_id": 3, "name": "Product 3", "price": 30.0},
-    ]
-    
-    for message in messages:
+
+    while True:
+        # Example message
+        message = {"product_id": 77, "name": "Product 7", "price": 60.0}
         producer.send(topic, message)
         print(f'Sent: {message}')
-    
-    producer.flush()
+        producer.flush()
+        time.sleep(5)  # Wait for a while before sending the next message
+
 
 if __name__ == "__main__":
     produce_messages(broker='kafka:9092', topic='test-products')
-
