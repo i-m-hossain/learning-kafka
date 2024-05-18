@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   zookeeper:
     image: 'bitnami/zookeeper:latest'
@@ -6,6 +6,7 @@ services:
       - '2181:2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+
   kafka:
     image: 'bitnami/kafka:latest'
     ports:
@@ -13,38 +14,8 @@ services:
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
-    volumes:
-      - ./create-topics.sh:/create-topics.sh
-  producer:
-    build:
-      context: ./Producer
-      dockerfile: Dockerfile
-    volumes:
-      - ./Producer:/app
-      - /Producer/__pycache__/
-    ports:
-      - "6000:6000"
-    environment:
-      - PYTHONUNBUFFERED=1
-    depends_on:
-      - kafka
-    command: ["sh", "-c", "sleep 20 && python producer.py"]
-  consumer:
-    build:
-      context: ./Consumer
-      dockerfile: Dockerfile
-    volumes:
-      - ./Consumer:/app
-      - /Consumer/__pycache__/
-    ports:
-      - "7000:7000"
-    environment:
-      - PYTHONUNBUFFERED=1
-    depends_on:
-      - kafka
-    command: ["sh", "-c", "sleep 30 && python consumer.py"]
