@@ -8,8 +8,15 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
     @Bean
-    public NewTopic topic() {
-        return TopicBuilder.name("test-topic-from-producer")
+    public NewTopic testTopic() {
+        return TopicBuilder.name("test-topic")
+                .partitions(10)
+                .replicas(1)
+                .build();
+    }
+    @Bean
+    public NewTopic userTopic() {
+        return TopicBuilder.name("user-topic")
                 .partitions(10)
                 .replicas(1)
                 .build();
